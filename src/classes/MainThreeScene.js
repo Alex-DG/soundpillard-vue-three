@@ -65,6 +65,7 @@ class MainThreeScene {
 
   update() {
     this.renderer.render(this.scene, this.camera)
+    SpherePillards.update()
   }
 
   resizeCanvas() {

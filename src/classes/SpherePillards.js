@@ -12,6 +12,7 @@ class SpherePillards {
   init(scene) {
     this.scene = scene
     this.upVector = new THREE.Vector3(0, 1, 0) // pointing up!
+    this.pillards = new THREE.Group()
     this.pillard
 
     this.modelLoader.load("./assets/models/pillard.glb", (glb) => {
@@ -34,6 +35,7 @@ class SpherePillards {
       glb.scene.traverse((child) => {
         // if (child instanceof THREE.Mesh) {
         if (child.name === "base") {
+          // Base + pillard inside
           this.pillard = child
           child.material = this.bMatCap
         }
@@ -70,6 +72,7 @@ class SpherePillards {
 
     // Create pillard positions
     let pillardPositions = []
+
     for (let i = 0; i < vertexArray.length; i++) {
       let existsFlag = false
 
@@ -90,6 +93,7 @@ class SpherePillards {
           z: vertexArray[i].z,
         })
 
+        // Clone base (with pillard inside clone.childre[0] is the pillard)
         const clone = this.pillard.clone()
 
         // Pillard with positions
@@ -108,14 +112,31 @@ class SpherePillards {
           posVector.normalize()
         )
 
-        this.scene.add(clone)
+        // this.scene.add(clone)
+        this.pillards.add(clone)
       }
     }
 
-    this.scene.add(this.sphere)
+    this.scene.add(this.pillards)
   }
 
-  update() {}
+  update() {
+    let i = 0
+    while (i < this.pillards.children.length) {
+      //  this.pillards.children[i].children[0].position.y =
+      //    (Math.sin(Date.now() * 0.01 + this.pillards.children[i].position.x) +
+      //      1) *
+      //    1.5
+
+      const base = this.pillards.children[i]
+      const pillard = base.children[0]
+
+      pillard.position.y =
+        (Math.sin(Date.now() * 0.01 + base.position.x) + 1) * 1.5
+
+      i++
+    }
+  }
 
   bind() {}
 }
