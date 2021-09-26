@@ -6,11 +6,9 @@ import RAF from "../utils/RAF"
 import config from "../utils/config"
 import MyGUI from "../utils/MyGUI"
 
-import simpleFrag from "../shaders/simple.frag"
-import simpleVert from "../shaders/simple.vert"
-
 import SpherePillards from "./SpherePillards"
 import Floor from "./Floor.js"
+import Spectrum from "./Spectrum.js"
 
 class MainThreeScene {
   constructor() {
@@ -38,7 +36,7 @@ class MainThreeScene {
       0.1,
       1000
     )
-    this.camera.position.set(0, 0, 5)
+    this.camera.position.set(0, 0, 10)
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.controls.enabled = config.controls
     this.controls.maxDistance = 1500
@@ -54,6 +52,7 @@ class MainThreeScene {
 
     SpherePillards.init(this.scene)
     Floor.init(this.scene)
+    Spectrum.init(this.scene)
 
     MyGUI.hide()
     if (config.myGui) MyGUI.show()
@@ -66,6 +65,7 @@ class MainThreeScene {
   update() {
     this.renderer.render(this.scene, this.camera)
     SpherePillards.update()
+    Spectrum.update()
   }
 
   resizeCanvas() {
