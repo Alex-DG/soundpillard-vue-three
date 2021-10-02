@@ -56,7 +56,7 @@ class Spectrum {
   }
 
   update() {
-    this.uniforms.uTime.value += 1
+    this.uniforms.uTime.value += 0.2
   }
 
   bind() {}

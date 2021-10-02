@@ -1,3 +1,4 @@
+import SoundReactor from "./SoundReactor"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
 import * as THREE from "three"
@@ -121,20 +122,25 @@ class SpherePillards {
   }
 
   update() {
-    let i = 0
-    while (i < this.pillards.children.length) {
-      //  this.pillards.children[i].children[0].position.y =
-      //    (Math.sin(Date.now() * 0.01 + this.pillards.children[i].position.x) +
-      //      1) *
-      //    1.5
+    if (SoundReactor.playFlag) {
+      let i = 0
+      const intensity = 4
+      while (i < this.pillards.children.length) {
+        const base = this.pillards.children[i]
+        const pillard = base.children[0]
+        pillard.position.y = (SoundReactor.fdata[i] / 255) * intensity
+        i++
+      }
+    } else {
+      let i = 0
+      while (i < this.pillards.children.length) {
+        const base = this.pillards.children[i]
+        const pillard = base.children[0]
+        pillard.position.y =
+          (Math.sin(Date.now() * 0.01 + base.position.x) + 1) * 1.5
 
-      const base = this.pillards.children[i]
-      const pillard = base.children[0]
-
-      pillard.position.y =
-        (Math.sin(Date.now() * 0.01 + base.position.x) + 1) * 1.5
-
-      i++
+        i++
+      }
     }
   }
 

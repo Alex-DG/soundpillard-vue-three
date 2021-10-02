@@ -9,6 +9,7 @@ import MyGUI from "../utils/MyGUI"
 import SpherePillards from "./SpherePillards"
 import Floor from "./Floor.js"
 import Spectrum from "./Spectrum.js"
+import ParticleSystem from "./ParticleSystem"
 
 class MainThreeScene {
   constructor() {
@@ -20,16 +21,16 @@ class MainThreeScene {
   }
 
   init(container) {
-    //RENDERER SETUP
+    // RENDERER SETUP
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.debug.checkShaderErrors = true
     container.appendChild(this.renderer.domElement)
 
-    //MAIN SCENE INSTANCE
+    // MAIN SCENE INSTANCE
     this.scene = new THREE.Scene()
 
-    //CAMERA AND ORBIT CONTROLLER
+    // CAMERA AND ORBIT CONTROLLER
     this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -53,6 +54,7 @@ class MainThreeScene {
     SpherePillards.init(this.scene)
     Floor.init(this.scene)
     Spectrum.init(this.scene)
+    ParticleSystem.init(this.scene)
 
     MyGUI.hide()
     if (config.myGui) MyGUI.show()
@@ -66,6 +68,7 @@ class MainThreeScene {
     this.renderer.render(this.scene, this.camera)
     SpherePillards.update()
     Spectrum.update()
+    ParticleSystem.update()
   }
 
   resizeCanvas() {

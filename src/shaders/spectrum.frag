@@ -12,7 +12,7 @@ uniform float uWaveBorder;
 uniform vec3 uBorderColor;
 
 void main() {
-    float n3 = snoise3(vec3(vPosition.xz * 5., uTime*0.01)) * .5;
+    float n3 = snoise3(vec3(vPosition.xz * 5., uTime*0.01)) * 0.9;
 
     float w = sin(vPosition.y * 5. - uTime * 0.2);
 
