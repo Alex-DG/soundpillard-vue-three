@@ -8,13 +8,14 @@ varying vec2 vMatCapUV;
 uniform sampler2D uMatCap;
 uniform float uSpecterSize;
 uniform float uTime;
+uniform float uWaveSpeed;
 uniform float uWaveBorder;
 uniform vec3 uBorderColor;
 
 void main() {
     float n3 = snoise3(vec3(vPosition.xz * 5., uTime*0.01)) * 0.9;
 
-    float w = sin(vPosition.y * 5. - uTime * 0.2);
+    float w = sin(vPosition.y * 5. - uTime * uWaveSpeed);
 
     float borderMask = step(w, n3 - uSpecterSize);
     borderMask -= step(w, n3 - (uSpecterSize + uWaveBorder));

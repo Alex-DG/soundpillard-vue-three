@@ -1,5 +1,6 @@
 import SoundReactor from "./SoundReactor"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import MyGUI from "../utils/MyGUI"
 
 import * as THREE from "three"
 
@@ -8,6 +9,15 @@ class SpherePillards {
     this.bind()
     this.modelLoader = new GLTFLoader()
     this.textureLoader = new THREE.TextureLoader()
+
+    this.params = {
+      waveSpeed: 1,
+      subDiv: 3,
+      pillardSize: 0.2,
+    }
+
+    this.sphereFolder = MyGUI.addFolder("Sphere Pillards")
+    this.sphereFolder.open()
   }
 
   init(scene) {
@@ -48,11 +58,37 @@ class SpherePillards {
 
       this.computePosition()
     })
+
+    this.sphereFolder
+      .add(this.params, "waveSpeed")
+      .min(0.001)
+      .max(3)
+      .name("Wave Speed")
+
+    this.sphereFolder
+      .add(this.params, "subDiv")
+      .min(1)
+      .max(5)
+      .step(1)
+      .name("Ico Subdivisions")
+      .onChange((_) => this.computePosition())
+
+    this.sphereFolder
+      .add(this.params, "pillardSize")
+      .min(0.0)
+      .max(1)
+      .name("Pill Size")
+      .onChange((_) => this.computePosition())
   }
 
   computePosition() {
+    if (this.sphere) {
+      this.scene.remove(this.sphere)
+      this.pillards.clear()
+    }
+
     // Create ico sphere
-    const sphereGeometry = new THREE.IcosahedronGeometry(2, 3)
+    const sphereGeometry = new THREE.IcosahedronGeometry(2, this.params.subDiv)
     const sphereMaterial = this.gMatCap
     this.sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
     this.scene.add(this.sphere)
@@ -105,7 +141,7 @@ class SpherePillards {
         )
         clone.position.copy(posVector)
 
-        clone.scale.multiplyScalar(0.2)
+        clone.scale.multiplyScalar(this.params.pillardSize)
 
         // Rotate pillard in the good position
         clone.quaternion.setFromUnitVectors(
@@ -137,14 +173,20 @@ class SpherePillards {
         const base = this.pillards.children[i]
         const pillard = base.children[0]
         pillard.position.y =
-          (Math.sin(Date.now() * 0.01 + base.position.x) + 1) * 1.5
+          (Math.sin(
+            Date.now() * 0.01 * this.params.waveSpeed + base.position.x
+          ) +
+            1) *
+          1.5
 
         i++
       }
     }
   }
 
-  bind() {}
+  bind() {
+    this.computePosition = this.computePosition.bind(this)
+  }
 }
 
 const _instance = new SpherePillards()

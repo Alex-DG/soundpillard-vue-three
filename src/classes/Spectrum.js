@@ -1,5 +1,6 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
+import MyGUI from "../utils/MyGUI"
 import * as THREE from "three"
 
 import vertexShader from "../shaders/spectrum.vert"
@@ -10,6 +11,9 @@ class Spectrum {
     this.bind()
     this.modelLoader = new GLTFLoader()
     this.textureLoader = new THREE.TextureLoader()
+
+    this.shaderFolder = MyGUI.addFolder("Spectrum Folder")
+    this.shaderFolder.open()
   }
 
   init(scene) {
@@ -26,8 +30,11 @@ class Spectrum {
       uTime: {
         value: 0.0,
       },
-      uWaveBorder: {
+      uWaveSpeed: {
         value: 0.15,
+      },
+      uWaveBorder: {
+        value: 0.1,
       },
       uBorderColor: {
         value: new THREE.Color("hsl(287, 80%, 80%)"),
@@ -53,6 +60,22 @@ class Spectrum {
       //   this.spectrum.translateY(-3)
       this.scene.add(this.spectrum)
     })
+
+    this.shaderFolder
+      .add(this.uniforms.uSpecterSize, "value")
+      .min(-1)
+      .max(1)
+      .name("Spectrum Size")
+    this.shaderFolder
+      .add(this.uniforms.uWaveBorder, "value")
+      .min(-1)
+      .max(1)
+      .name("Border Size")
+    this.shaderFolder
+      .add(this.uniforms.uWaveSpeed, "value")
+      .min(0)
+      .max(1)
+      .name("Wave Speed")
   }
 
   update() {

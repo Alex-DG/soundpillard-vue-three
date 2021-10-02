@@ -5,6 +5,12 @@ class ParticleSystem {
     this.bind()
     this.particleCount = 4000
     this.boxSize = 30
+
+    this.params = {
+      waveSpeed: 1,
+      subDiv: 3,
+      pillardSize: 0.2,
+    }
   }
 
   init(scene) {
@@ -35,7 +41,6 @@ class ParticleSystem {
       this.particlesGeom,
       this.particleMaterial
     )
-    console.log(this.particlesGeom.attributes.position.array)
     this.scene.add(this.particleSystem)
   }
 
